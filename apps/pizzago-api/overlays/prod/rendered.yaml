@@ -1,0 +1,56 @@
+---
+# Source: pizzago-api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pizzago-api
+  labels:
+    app: pizzago-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: pizzago-api
+---
+# Source: pizzago-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizzago-api
+  labels:
+    app: pizzago-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pizzago-api
+  template:
+    metadata:
+      labels:
+        app: pizzago-api
+    spec:
+      containers:
+        - name: pizzago-api
+          image: "braganathan38/pizzago-api-gitops:prod-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          livenessProbe: 
+            httpGet:
+              path: /healthz
+              port: 8080
+          readinessProbe: 
+            httpGet:
+              path: /readyz
+              port: 8080
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi

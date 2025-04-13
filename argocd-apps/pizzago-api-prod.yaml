@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pizzago-api-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Nathan-Silva/pizzago-infra-gitops
+    targetRevision: main
+    path: apps/pizzago-api/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pizzago-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
