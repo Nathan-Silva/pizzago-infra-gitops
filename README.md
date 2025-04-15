@@ -150,3 +150,6 @@ argocd app sync pizzago-infra
 
 Agora o Argo CD está monitorando seu repositório e mantendo o ambiente sincronizado com os manifests declarativos do `pizzago-infra-gitops`. 🚀
 
+```bash
+helm template pizzago-api ../../base/helm-chart -f values-qa.yaml > rendered.yaml
+```
